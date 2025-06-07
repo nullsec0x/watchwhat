@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title> WatchWhat?! - Random Movie Picker</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Schoolbell&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="icon" href="icon.png" type="image/png">
+</head>
+<body>
+  <div class="app-container">
+    <header class="app-header">
+      <div class="title-group">
+        <svg class="logo-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M7 8.01L7.01 7.99889" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
+          <path d="M17 8.01L17.01 7.99889" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
+          <path d="M7 12.01L7.01 11.9989" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
+          <path d="M17 12.01L17.01 11.9989" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
+          <path d="M7 16.01L7.01 15.9989" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
+          <path d="M17 16.01L17.01 15.9989" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
+          <path d="M7 2H3.6C3.26863 2 3 2.26863 3 2.6V21.4C3 21.7314 3.26863 22 3.6 22H7M7 2V4M7 2H17M17 2H20.4C20.7314 2 21 2.26863 21 2.6V21.4C21 21.7314 20.7314 22 20.4 22H17M17 2V4M17 22V20M17 22H7M7 22V20" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
+        </svg>
+        <h1>WatchWhat?!</h1>
+      </div>
+      <p class="subtitle">Find your next cinematic obsession <br>(When you’ve scrolled for 20 minutes and still don’t know.)</p>
+      <label class="theme-switch">
+        <input id="theme-toggle" type="checkbox" />
+        <span class="slider"></span>
+        <span class="theme-icon sun">☀️</span>
+        <span class="theme-icon moon">🌙</span>
+      </label>
+    </header>
+
+    <main class="app-content">
+      <div class="controls-container">
+        <div class="filter-row">
+          <div class="input-form">
+            <select id="genre" class="input" required>
+              <option value="" selected disabled></option>
+              <option value="">Any genre</option>
+            </select>
+            <label class="floating-label">Genre</label>
+          </div>
+      
+          <div class="input-form">
+            <input type="number" id="year" class="input" placeholder=" " min="1900" max="2025">
+            <label class="floating-label">Release Year</label>
+          </div>
+      
+          <div class="input-form">
+            <input type="number" id="rating" class="input" placeholder=" " min="0" max="10" step="0.1">
+            <label class="floating-label">Min Rating</label>
+          </div>
+        </div>
+
+        <button id="pick-movie" class="pick-button">
+          <svg class="button-icon" viewBox="0 0 24 24">
+            <path d="M12,2C6.48,2,2,6.48,2,12s4.48,10,10,10s10-4.48,10-10S17.52,2,12,2z M12,20c-4.42,0-8-3.58-8-8s3.58-8,8-8s8,3.58,8,8 S16.42,20,12,20z M16.24,7.76c-0.78-0.78-2.05-0.78-2.83,0L12,9.17l-1.41-1.41c-0.78-0.78-2.05-0.78-2.83,0 c-0.78,0.78-0.78,2.05,0,2.83L9.17,12l-1.41,1.41c-0.78,0.78-0.78,2.05,0,2.83c0.78,0.78,2.05,0.78,2.83,0L12,14.83l1.41,1.41 c0.78,0.78,2.05,0.78,2.83,0c0.78-0.78,0.78-2.05,0-2.83L14.83,12l1.41-1.41C17.02,9.81,17.02,8.54,16.24,7.76z"/>
+          </svg>
+          Pick a Movie
+        </button>
+      </div>
+
+      <div id="movie-result" class="movie-result hidden">
+        <div class="movie-card">
+          <div class="poster-container">
+            <img id="movie-poster" class="movie-poster" src="" alt="Movie poster" />
+          </div>
+          <div class="movie-info">
+            <h2 id="movie-title"></h2>
+            <div class="movie-meta">
+              <span id="movie-year" class="meta-item"></span>
+              <span id="movie-rating-value" class="meta-item"></span>
+            </div>
+            <p id="movie-overview" class="movie-overview"></p>
+            <div class="movie-actions">
+              <a href="#" id="movie-netflix-link" class="action-button" target="_blank">
+                <svg class="action-icon" viewBox="0 0 24 24">
+                  <path d="M5.398 0v.006c3.028 8.556 5.37 15.175 8.348 23.596 2.344.058 4.85.398 4.854.398-2.8-7.924-5.923-16.747-8.487-24zm8.489 0v9.63L18.6 22.951c-.043-7.86-.004-15.913.012-22.95zM5.398 1.05V24c1.873-.225 2.81-.312 4.715-.398v-9.22z"/>
+                </svg>
+                View on Netflix
+              </a>
+              <a id="movie-tmdb-link" class="action-button" target="_blank">
+                <svg class="action-icon" viewBox="0 0 24 24">
+                  <path d="M12,2C6.48,2,2,6.48,2,12s4.48,10,10,10s10-4.48,10-10S17.52,2,12,2z M12,20c-4.41,0-8-3.59-8-8s3.59-8,8-8 s8,3.59,8,8S16.41,20,12,20z M12.34,7.45c-0.2,0-0.38,0.08-0.53,0.22c-0.14,0.14-0.22,0.33-0.22,0.53v8c0,0.2,0.08,0.38,0.22,0.53 c0.14,0.14,0.33,0.22,0.53,0.22s0.38-0.08,0.53-0.22c0.14-0.14,0.22-0.33,0.22-0.53v-8c0-0.2-0.08-0.38-0.22-0.53 C12.72,7.53,12.54,7.45,12.34,7.45z M8.34,7.45c-0.2,0-0.38,0.08-0.53,0.22C7.67,7.81,7.59,8,7.59,8.2v8 c0,0.2,0.08,0.38,0.22,0.53c0.14,0.14,0.33,0.22,0.53,0.22s0.38-0.08,0.53-0.22c0.14-0.14,0.22-0.33,0.22-0.53v-8 c0-0.2-0.08-0.38-0.22-0.53C8.72,7.53,8.54,7.45,8.34,7.45z M16.34,7.45c-0.2,0-0.38,0.08-0.53,0.22 c-0.14,0.14-0.22,0.33-0.22,0.53v8c0,0.2,0.08,0.38,0.22,0.53c0.14,0.14,0.33,0.22,0.53,0.22s0.38-0.08,0.53-0.22 c0.14-0.14,0.22-0.33,0.22-0.53v-8c0-0.2-0.08-0.38-0.22-0.53C16.72,7.53,16.54,7.45,16.34,7.45z"/>
+                </svg>
+                View on TMDB
+              </a>
+              <button id="try-again" class="action-button secondary">
+                <svg class="action-icon" viewBox="0 0 24 24">
+                  <path d="M12,6v3l4-4l-4-4v3c-4.42,0-8,3.58-8,8c0,1.57,0.46,3.03,1.24,4.26L6.7,14.8c-0.45-0.83-0.7-1.79-0.7-2.8 C6,9.13,8.67,6.5,12,6z M18.76,7.74L17.3,9.2c0.44,0.84,0.7,1.79,0.7,2.8c0,3.87-3.13,7-7,7v-3l-4,4l4,4v-3 C19.58,18,23,14.58,23,10C23,8.43,22.54,6.97,21.76,5.74L18.76,7.74z"/>
+                </svg>
+                Try another
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div id="loading" class="loading hidden">
+        <div class="spinner"></div>
+        <p>Searching the movie database...</p>
+      </div>
+
+      <div id="error" class="error hidden"></div>
+    </main>
+
+    <div class="footer-text">
+      Made by Nullsec0x with <span class="heart"><3</span> | 
+      <a href="https://github.com/nullsec0x" target="_blank" class="github-link">my GitHub</a>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
