@@ -208,12 +208,13 @@ input:checked + .slider:before {
 }
 
 .input-form {
-    height: 56px !important;
-  }
-  
-  .filter-row > * {
+    height: 56px;
+    position: relative;
+}
+
+.filter-row > * {
     min-height: 56px;
-  }
+}
 
 .input {
     width: 100%;
@@ -270,7 +271,6 @@ input[type="number"]::-webkit-outer-spin-button {
     margin: 0;
 }
 
-/* Buttons */
 .pick-button {
     width: 100%;
     padding: 1rem;
@@ -473,7 +473,7 @@ input[type="number"]::-webkit-outer-spin-button {
     padding: 1rem 0;
     margin: 2rem auto 0;
     font-size: 1.1rem;
-  }
+}
 
 .github-link {
     color: var(--accent);
@@ -542,113 +542,153 @@ input[type="number"]::-webkit-outer-spin-button {
       padding: 0.5rem 0;
     }
 
-.hidden {
-    display: none !important;
-}
-body {
-    position: relative;
-    min-height: 100vh;
-    padding-bottom: 4rem; 
-  }
-  
-  .footer-text {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    text-align: center;
-    background: var(--bg); 
-    z-index: 1;           
-  }
-
-  @media (max-width: 768px) {
+    .hidden {
+        display: none !important;
+    }
     body {
-      padding: 1rem !important;
-      font-size: 16px !important;
-      -webkit-text-size-adjust: 100%;
-    }
-  
-    .app-header {
-      padding-top: 2.5rem !important; 
+        position: relative;
+        min-height: 100vh;
+        padding-bottom: 4rem; 
     }
     
-    .app-header h1 {
-      font-size: 2rem !important;
-    }
-    
-    .subtitle {
-      font-size: 1rem !important;
-    }
-  
-    .theme-switch {
-      top: 0.5rem !important;
-      right: 0.5rem !important;
-      width: 50px !important;
-      height: 28px !important;
-    }
-    
-    .slider:before {
-      height: 22px !important;
-      width: 22px !important;
-      bottom: 3px !important;
-    }
-  
-    .input-form {
-      height: 60px !important;
-    }
-  
-    .input {
-      font-size: 16px !important;
-      padding: 1.8rem 1rem 0.5rem !important;
-    }
-  
-    .pick-button, 
-    .action-button {
-      padding: 1.2rem !important;
-      min-height: 50px !important;
-    }
-  
-    .movie-card {
-      flex-direction: column !important;
-      gap: 1rem !important;
-    }
-  
-    .poster-container {
-      flex: 0 0 auto !important;
-      max-height: 50vh !important;
-    }
-  
     .footer-text {
-      padding: 1rem !important;
-      font-size: 1.1rem !important;
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        text-align: center;
+        background: var(--bg); 
+        z-index: 1;           
     }
-  }
-  
-  * {
-    -webkit-tap-highlight-color: transparent;
-  }
-  
-  html {
-    text-size-adjust: 100%;
-    -webkit-text-size-adjust: 100%;
-  }
 
-.ick-button:disabled, 
-.action-button:disabled {
-  opacity: 0.7;
-  cursor: not-allowed;
-  transform: none !important;
-  box-shadow: none !important;
+    @media (max-width: 768px) {
+        body {
+            padding: 1rem !important;
+            font-size: 16px !important;
+            -webkit-text-size-adjust: 100%;
+        }
+    
+        .app-header {
+            padding-top: 2.5rem !important; 
+        }
+        
+        .app-header h1 {
+            font-size: 2rem !important;
+        }
+        
+        .subtitle {
+            font-size: 1rem !important;
+        }
+    
+        .theme-switch {
+            top: 0.5rem !important;
+            right: 0.5rem !important;
+            width: 50px !important;
+            height: 28px !important;
+        }
+        
+        .slider:before {
+            height: 22px !important;
+            width: 22px !important;
+            bottom: 3px !important;
+        }
+    
+        .input-form {
+            height: 60px !important;
+        }
+    
+        .input {
+            font-size: 16px !important;
+            padding: 1.8rem 1rem 0.5rem !important;
+        }
+    
+        .pick-button, 
+        .action-button {
+            padding: 1.2rem !important;
+            min-height: 50px !important;
+        }
+    
+        .movie-card {
+            flex-direction: column !important;
+            gap: 1rem !important;
+        }
+    
+        .poster-container {
+            flex: 0 0 auto !important;
+            max-height: 50vh !important;
+        }
+    
+        .footer-text {
+            padding: 1rem !important;
+            font-size: 1.1rem !important;
+        }
+    }
+    
+    * {
+        -webkit-tap-highlight-color: transparent;
+    }
+    
+    html {
+        text-size-adjust: 100%;
+        -webkit-text-size-adjust: 100%;
+    }
+
+    .pick-button:disabled, 
+    .action-button:disabled {
+        opacity: 0.7;
+        cursor: not-allowed;
+        transform: none !important;
+        box-shadow: none !important;
+    }
+
+    .no-poster {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 100%;
+        background-color: var(--card-bg);
+        color: var(--text);
+        font-style: italic;
+        padding: 1rem;
+        text-align: center;
+    }
 }
 
-.no-poster {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: 100%;
-  background-color: var(--card-bg);
-  color: var(--text);
-  font-style: italic;
-  padding: 1rem;
-  text-align: center;
-}}
+.input-form {
+    position: relative;
+    height: 56px;
+}
+
+.input-form .floating-label {
+    position: absolute;
+    pointer-events: none;
+    transition: all 0.3s ease;
+    top: 1.2rem;
+    left: 1rem;
+    opacity: 0.7;
+    font-size: 1rem;
+}
+
+.input:focus ~ .floating-label,
+.input:not(:placeholder-shown) ~ .floating-label {
+    transform: translateY(-0.8rem) scale(0.85);
+    opacity: 1;
+    color: var(--accent);
+    background: var(--card-bg);
+    padding: 0 0.3rem;
+    left: 1rem;
+}
+
+#genre + .floating-label {
+    transform: translateY(-0.8rem) scale(0.85);
+    opacity: 1;
+    color: var(--accent);
+    background: var(--card-bg);
+    padding: 0 0.3rem;
+    left: 1rem;
+}
+
+#year::placeholder,
+#rating::placeholder {
+    color: transparent;
+}
