@@ -569,3 +569,77 @@ body {
     background: var(--bg); 
     z-index: 1;           
   }
+  
+@media (max-width: 768px) {
+  body {
+    padding: 1rem !important;
+    font-size: 16px !important;
+    -webkit-text-size-adjust: 100%;
+  }
+
+  .app-header {
+    padding-top: 2.5rem !important; 
+  }
+  
+  .app-header h1 {
+    font-size: 2rem !important;
+  }
+  
+  .subtitle {
+    font-size: 1rem !important;
+  }
+
+  .theme-switch {
+    top: 0.5rem !important;
+    right: 0.5rem !important;
+    width: 50px !important;
+    height: 28px !important;
+  }
+  
+  .slider:before {
+    height: 22px !important;
+    width: 22px !important;
+    bottom: 3px !important;
+  }
+
+  .input-form {
+    height: 60px !important;
+  }
+
+  .input {
+    font-size: 16px !important;
+    padding: 1.8rem 1rem 0.5rem !important;
+  }
+
+  /* Buttons */
+  .pick-button, 
+  .action-button {
+    padding: 1.2rem !important;
+    min-height: 50px !important;
+  }
+
+  /* Movie card */
+  .movie-card {
+    flex-direction: column !important;
+    gap: 1rem !important;
+  }
+
+  .poster-container {
+    flex: 0 0 auto !important;
+    max-height: 50vh !important;
+  }
+
+  /* Footer */
+  .footer-text {
+    padding: 1rem !important;
+    font-size: 1.1rem !important;
+  }
+}
+
+* {
+  -webkit-tap-highlight-color: transparent;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+}
