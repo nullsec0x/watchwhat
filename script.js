@@ -25,6 +25,9 @@ let currentFilters = {
   rating: null
 };
 
+let isFetching = false;
+let activeRequestController = null;
+
 async function init() {
   try {
     setupThemeToggle();
@@ -35,7 +38,8 @@ async function init() {
     showError('Failed to initialize app. Please try again later.');
     console.error('Initialization error:', error);
   }
-setTimeout(() => {
+  
+  setTimeout(() => {
     document.querySelector('.controls-container').style.opacity = '1';
     document.querySelector('.controls-container').style.transform = 'translateY(0)';
   }, 100);
@@ -103,6 +107,15 @@ function setupEventListeners() {
 }
 
 async function handlePickMovie() {
+  if (isFetching) return;
+  
+  if (activeRequestController) {
+    activeRequestController.abort();
+  }
+  
+  activeRequestController = new AbortController();
+  const signal = activeRequestController.signal;
+
   if (yearInput.value && (yearInput.value < 1900 || yearInput.value > new Date().getFullYear())) {
     showError('Please enter a valid year between 1900 and current year');
     return;
@@ -114,24 +127,33 @@ async function handlePickMovie() {
   }
   
   try {
+    isFetching = true;
+    disableButtons(true);
     showLoading();
     hideError();
     hideMovieResult();
     
     const queryParams = buildQueryParams();
-    const discoverResponse = await fetch(`${BASE_URL}/discover/movie?api_key=${API_KEY}&${queryParams}`);
-    if (!discoverResponse.ok) throw new Error(`API error: ${discoverResponse.status}`);
+    const discoverResponse = await fetch(`${BASE_URL}/discover/movie?api_key=${API_KEY}&${queryParams}`, {signal});
+    
+    if (!discoverResponse.ok) {
+      if (discoverResponse.status === 422) {
+        throw new Error('Invalid parameters. Please adjust your filters.');
+      }
+      throw new Error(`API error: ${discoverResponse.status}`);
+    }
     
     const discoverData = await discoverResponse.json();
     const totalPages = discoverData.total_pages > 500 ? 500 : discoverData.total_pages;
     
-    if (totalPages === 0) {
+    if (totalPages === 0 || discoverData.total_results === 0) {
       showError('No movies found with these filters. Try different criteria.');
       return;
     }
     
     const randomPage = Math.floor(Math.random() * totalPages) + 1;
-    const randomPageResponse = await fetch(`${BASE_URL}/discover/movie?api_key=${API_KEY}&${queryParams}&page=${randomPage}`);
+    const randomPageResponse = await fetch(`${BASE_URL}/discover/movie?api_key=${API_KEY}&${queryParams}&page=${randomPage}`, {signal});
+    
     if (!randomPageResponse.ok) throw new Error(`API error: ${randomPageResponse.status}`);
     
     const randomPageData = await randomPageResponse.json();
@@ -139,20 +161,35 @@ async function handlePickMovie() {
       showError('No movies found on this page. Try again.');
       return;
     }
-    
+  
     const randomMovieIndex = Math.floor(Math.random() * randomPageData.results.length);
     const selectedMovie = randomPageData.results[randomMovieIndex];
     displayMovie(selectedMovie);
   } catch (error) {
-    showError('Failed to fetch movies. Please try again later.');
+    if (error.name === 'AbortError') {
+      console.log('Request aborted by user');
+      return;
+    }
+    showError(error.message || 'Failed to fetch movies. Please try again later.');
     console.error('Error picking movie:', error);
   } finally {
+    isFetching = false;
+    disableButtons(false);
+    activeRequestController = null;
     hideLoading();
   }
 }
 
 function handleTryAgain() {
-  handlePickMovie();
+  if (isFetching) return;
+  
+  tryAgainBtn.disabled = true;
+  movieResult.classList.remove('show');
+  
+  setTimeout(() => {
+    movieResult.classList.add('hidden');
+    handlePickMovie();
+  }, 300);
 }
 
 function buildQueryParams() {
@@ -171,38 +208,48 @@ function buildQueryParams() {
 }
 
 function displayMovie(movie) {
-    if (movie.poster_path) {
-      moviePoster.src = IMAGE_BASE_URL + movie.poster_path;
-      moviePoster.alt = `${movie.title} poster`;
-      moviePoster.style.display = 'block';
-      document.querySelector('.poster-container').style.backgroundColor = 'transparent';
-      document.querySelector('.poster-container').innerHTML = '';
-      document.querySelector('.poster-container').appendChild(moviePoster);
-    } else {
-      moviePoster.src = '';
-      moviePoster.alt = 'Poster not available';
-      moviePoster.style.display = 'none';
-      document.querySelector('.poster-container').style.backgroundColor = 'var(--bg)';
-      document.querySelector('.poster-container').innerHTML = '<p>Poster Not Available</p>';
-    }
-    
-    movieTitle.textContent = movie.title;
-    movieOverview.textContent = movie.overview || 'No overview available.';
-    
-    const releaseYear = movie.release_date ? new Date(movie.release_date).getFullYear() : 'Unknown';
-    movieYear.textContent = releaseYear !== 'Unknown' ? `Released: ${releaseYear}` : 'Release date unknown';
-    
-    const rating = movie.vote_average ? movie.vote_average.toFixed(1) : 'N/A';
-    movieRatingValue.textContent = `${rating}/10`;
-    
-    movieTmdbLink.href = `https://www.themoviedb.org/movie/${movie.id}`;
-    
-    const netflixLink = document.getElementById('movie-netflix-link');
-    netflixLink.href = `https://www.netflix.com/search?q=${encodeURIComponent(movie.title)}`;
-    
-    showMovieResult();
+  const posterContainer = document.querySelector('.poster-container');
+  posterContainer.innerHTML = '';
+  
+  if (movie.poster_path) {
+    const posterImg = document.createElement('img');
+    posterImg.id = 'movie-poster';
+    posterImg.src = IMAGE_BASE_URL + movie.poster_path;
+    posterImg.alt = `${movie.title} poster`;
+    posterImg.classList.add('movie-poster');
+    posterContainer.appendChild(posterImg);
+  } else {
+    posterContainer.innerHTML = '<div class="no-poster"><p>Poster Not Available</p></div>';
+    posterContainer.style.backgroundColor = 'var(--card-bg)';
   }
+  
+  movieTitle.textContent = movie.title;
+  movieOverview.textContent = movie.overview || 'No overview available.';
+  
+  const releaseYear = movie.release_date ? new Date(movie.release_date).getFullYear() : 'Unknown';
+  movieYear.textContent = releaseYear !== 'Unknown' ? `Released: ${releaseYear}` : 'Release date unknown';
+  
+  const rating = movie.vote_average ? movie.vote_average.toFixed(1) : 'N/A';
+  movieRatingValue.textContent = `${rating}/10`;
+  
+  movieTmdbLink.href = `https://www.themoviedb.org/movie/${movie.id}`;
+  
+  const netflixLink = document.getElementById('movie-netflix-link');
+  netflixLink.href = `https://www.netflix.com/search?q=${encodeURIComponent(movie.title)}`;
+  
+  setTimeout(() => {
+    movieResult.style.display = 'block';
+    setTimeout(() => {
+      movieResult.classList.remove('hidden');
+      movieResult.classList.add('show');
+    }, 10);
+  }, 10);
+}
 
+function disableButtons(disabled) {
+  pickMovieBtn.disabled = disabled;
+  tryAgainBtn.disabled = disabled;
+}
 
 function showLoading() {
   loadingElement.classList.remove('hidden');
@@ -212,18 +259,9 @@ function hideLoading() {
   loadingElement.classList.add('hidden');
 }
 
-function showMovieResult() {
-  movieResult.classList.remove('hidden');
-  setTimeout(() => {
-    movieResult.classList.add('show');
-  }, 10);
-}
-
 function hideMovieResult() {
   movieResult.classList.remove('show');
-  setTimeout(() => {
-    movieResult.classList.add('hidden');
-  }, 300);
+  movieResult.classList.add('hidden');
 }
 
 function showError(message) {
