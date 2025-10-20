@@ -7,13 +7,13 @@ Tired of scrolling through Netflix for 40 minutes just to rewatch *Shrek* again?
 
 ---
 
-## ⚡ What It Does
+##  What It Does
 
-- 🎯 Pick by **genre**, **year**, or **rating** — or don’t. Go full chaos.  
-- 🌗 Light/Dark Mode — depending on your mood (or your battery).  
-- 🔎 One-click Netflix search — if it’s there, it’s yours.  
-- 🌀 Clean AF UI — smooth animations, hover stuff, no mess.  
-- 📱 Works on phones — ‘cause not everyone’s watching on a TV.
+-  Pick by **genre**, **year**, or **rating** — or don’t. Go full chaos.  
+-  Light/Dark Mode — depending on your mood (or your battery).  
+-  One-click Netflix search — if it’s there, it’s yours.  
+-  Clean AF UI — smooth animations, hover stuff, no mess.  
+-  Works on phones — ‘cause not everyone’s watching on a TV.
 
 ---
 
@@ -26,7 +26,7 @@ Tired of scrolling through Netflix for 40 minutes just to rewatch *Shrek* again?
 
 ---
 
-## 🛠️ What’s Under the Hood
+##  What’s Under the Hood
 
 - **HTML + CSS + JavaScript** (no libraries, no fluff)  
 - **TMDB API** for the movie magic  
@@ -34,7 +34,7 @@ Tired of scrolling through Netflix for 40 minutes just to rewatch *Shrek* again?
 
 ---
 
-## 🚀 Setup (It’s Dumb Easy)
+##  Setup (It’s Dumb Easy)
 
 Run this in your terminal:
 
@@ -55,7 +55,7 @@ Drop your TMDB API key into `script.js` and you're set.
 
 ---
 
-## 🙌 Credits
+##  Credits
 
 - TMDB — for the API hookup  
 - You — for not settling for “meh” movies
@@ -69,7 +69,7 @@ Just don’t blame us if you’re up all night watching 5 in a row.
 
 ---
 
-## 🎯 Try It Live
+##  Try It Live
 
 👉 [nullsec0x.github.io/watchwhat](https://nullsec0x.github.io/watchwhat) 👈  
 No installs. No signup. Just movies.
